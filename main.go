@@ -10,7 +10,7 @@ func main() {
 	connection.GetDatabaseDetails("production")
 	cursor := connection.Connect()
 	defer cursor.Close()
-	rows, err := cursor.Query("SELECT CURRENT date")
+	rows, err := cursor.Query("SELECT CURRENT_DATE")
 	if err != nil{
 		fmt.Println(err)
 	}
