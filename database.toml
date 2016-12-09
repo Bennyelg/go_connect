@@ -1,0 +1,15 @@
+[databases]
+  [databases.devlopment]
+    user = "username"
+    password = "#"
+    port = "3306"
+    host = "localhost"
+    max_open_connection = "10"
+    max_idle_connection = "10"
+  [databases.production]
+    user = "username"
+    password = "#"
+    port = "3306"
+    host = "localhost"
+    max_open_connection = "10"
+    max_idle_connection = "10"
