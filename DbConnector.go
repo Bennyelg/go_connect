@@ -84,20 +84,3 @@ func (db *Database) Connect() *sql.DB{
 		    "\nMaxIdleConnection:", db.maxIdleConnection)
 	return DbCon
 }
-
-func main() {
-
-	connection := new(Database)
-	connection.GetDatabaseDetails("production")
-	cursor := connection.Connect()
-	defer cursor.Close()
-	rows, err := cursor.Query("SELECT CURRENT_DATE")
-	if err != nil{
-		fmt.Println(err)
-	}
-	for rows.Next() {
-		var time string
-		rows.Scan(&time)
-		fmt.Println(time)
-	}
-}
