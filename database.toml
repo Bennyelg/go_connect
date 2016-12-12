@@ -1,10 +1,11 @@
 [databases]
-  [databases.devlopment]
+  [databases.development]
     type = "mysql"
-    user = "username"
+    user = "hiveuser"
     password = "#"
     port = "3306"
     host = "localhost"
+    database = "tests"
     max_open_connection = "10"
     max_idle_connection = "10"
   [databases.production]

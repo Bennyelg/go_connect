@@ -1,4 +1,4 @@
-package main
+package dbConnector
 
 import (
 	"fmt"
@@ -22,9 +22,9 @@ type Database struct {
 }
 
 // Parsing database information by giving environment. (development/production)
-func (db *Database) GetDatabaseDetails(env string) {
+func (db *Database) ParseDatabaseByEnv(env, path string) {
 	// Load file assuming is in the parent directory.
-	databaseInfo, _ := toml.LoadFile("database.toml")
+	databaseInfo, _ := toml.LoadFile(path)
 	// Parsing env.
 	dbEnv := fmt.Sprintf("databases.%s", env)
 	if dbEnv == "" {
@@ -68,16 +68,21 @@ func (db *Database) Connect() *sql.DB{
 		url = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", db.username, db.password, db.host, db.port, db.database)
 
 	}else if db.dbType == "postgres" {
-		url= fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", db.username, db.password, db.database)
+		url= fmt.Sprintf("user=%s password=%s dbname=%s host=%s sslmode=disable",
+			db.username, db.password, db.database, db.host)
 	}else{
 		fmt.Println("[Error]: Not supported database.")
+		os.Exit(1)
 	}
+	// Trying to open the connection with the specified details.
 	DbCon, err := sql.Open(db.dbType, url)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	// Pinging the connection.
 	DbCon.Ping()
+	// Update connection pools.
 	DbCon.SetMaxOpenConns(db.maxOpenConnection)
 	DbCon.SetMaxIdleConns(db.maxIdleConnection)
 	fmt.Println("[Status]: Connected!\nMaxOpenConnection:", db.maxOpenConnection,

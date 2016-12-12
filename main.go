@@ -2,12 +2,18 @@ package main
 
 import (
 	"fmt"
+	cnt "dbConnector"
+)
+
+const (
+	databaseFilePath = "/Users/benny/go/database.toml"
+	env = "production"
 )
 
 func main() {
 
-	connection := new(Database)
-	connection.GetDatabaseDetails("production")
+	connection := new(cnt.Database)
+	connection.ParseDatabaseByEnv(env, databaseFilePath)
 	cursor := connection.Connect()
 	defer cursor.Close()
 	rows, err := cursor.Query("SELECT CURRENT_DATE")
@@ -20,4 +26,3 @@ func main() {
 		fmt.Println(time)
 	}
 }
-
